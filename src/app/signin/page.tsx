@@ -11,8 +11,11 @@ export default function SignIn() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    // Always redirect to /signin when the button is clicked
-    router.push("/signin");
+    if (key === "SHAD2025") {
+      router.push("/dashboard");
+    } else {
+      setError("Invalid government key. Please try again.");
+    }
   };
 
   return (
