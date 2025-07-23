@@ -1,0 +1,122 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&display=swap');
+@import "tailwindcss";
+:root {
+  --background: #ffffff;
+  --foreground: #171717;
+  --font-sans: 'DM Sans', sans-serif;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: 'DM Sans', sans-serif;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #0a0a0a;
+    --foreground: #ededed;
+  }
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: 'DM Sans', sans-serif;
+}
+
+@keyframes gradientMove {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+.animated-gradient {
+  background-size: 200% 200%;
+  animation: gradientMove 4s ease-in-out infinite;
+  position: relative;
+  overflow: hidden;
+}
+
+.animated-gradient::after {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle at 20% 20%, rgba(255,255,255,0.18) 0%, rgba(255,255,255,0.10) 30%, rgba(255,255,255,0.04) 60%, rgba(255,255,255,0.0) 100%),
+              radial-gradient(circle at 80% 80%, rgba(255,255,255,0.15) 0%, rgba(255,255,255,0.08) 30%, rgba(255,255,255,0.0) 80%);
+  pointer-events: none;
+  animation: shineMoveSubtle 5s linear infinite;
+  mix-blend-mode: lighten;
+}
+
+@keyframes shineMoveSubtle {
+  0% {
+    top: -50%;
+    left: -50%;
+    opacity: 0.7;
+  }
+  25% {
+    top: 0%;
+    left: 50%;
+    opacity: 0.5;
+  }
+  50% {
+    top: 50%;
+    left: 100%;
+    opacity: 0.3;
+  }
+  75% {
+    top: 100%;
+    left: 50%;
+    opacity: 0.5;
+  }
+  100% {
+    top: -50%;
+    left: -50%;
+    opacity: 0.7;
+  }
+}
+
+.animated-gradient-bg {
+  animation: moveGradient 12s ease-in-out infinite alternate;
+}
+
+@keyframes moveGradient {
+  0% {
+    background-position: 70% 60%;
+  }
+  50% {
+    background-position: 30% 40%;
+  }
+  100% {
+    background-position: 70% 60%;
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+.shimmer-gradient {
+  background: linear-gradient(90deg, #a21caf 0%, #ec4899 100%);
+  background-size: 200% 100%;
+  animation: shimmer 15s linear infinite;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  position: relative;
+}
