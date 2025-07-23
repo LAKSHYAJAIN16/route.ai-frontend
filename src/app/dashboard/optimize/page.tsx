@@ -1,10 +1,33 @@
 "use client";
-import React from "react";
+import React, { useState, useMemo } from "react";
 import Sidebar from '../../../components/Sidebar';
 import { getRoutes, getSchedules } from '../data';
 import Head from "next/head";
 
 export default function Optimize() {
+  // Add missing state definitions
+  const [maxWalkingDistance, setMaxWalkingDistance] = useState(500);
+  const [maxWaitTime, setMaxWaitTime] = useState(10);
+  const [transferPenalty, setTransferPenalty] = useState(5);
+  const [maxTransfers, setMaxTransfers] = useState(2);
+  const [serviceStart, setServiceStart] = useState("06:00");
+  const [serviceEnd, setServiceEnd] = useState("22:00");
+  const [busCapacity, setBusCapacity] = useState(40);
+  const [busStopsConstructed, setBusStopsConstructed] = useState(5);
+  const [numberOfRoutes, setNumberOfRoutes] = useState(3);
+  const [priorityWait, setPriorityWait] = useState(0.33);
+  const [priorityWalk, setPriorityWalk] = useState(0.33);
+  const [priorityTransfers, setPriorityTransfers] = useState(0.34);
+  const prioritySum = priorityWait + priorityWalk + priorityTransfers;
+  const sumTextColor = prioritySum === 1 ? 'text-green-600' : 'text-red-600';
+  const [allStops, setAllStops] = useState<any[]>([]);
+  const [routeSchedules, setRouteSchedules] = useState<any[]>([]);
+  const [expanded, setExpanded] = useState<Record<string, boolean>>({});
+  const toggleExpand = (routeId: string, day: string) => {
+    setExpanded(exp => ({ ...exp, [`${routeId}-${day}`]: !exp[`${routeId}-${day}`] }));
+  };
+  const [routes, setRoutes] = useState<any[]>([]);
+
   return (
     <>
       <Head>
@@ -118,7 +141,7 @@ export default function Optimize() {
               <div className="mt-8">
                 <h2 className="text-lg font-bold text-[#2d2363] mb-2">Current Schedules</h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  {routeSchedules.map(({ schedule, route }: ScheduleType) => {
+                  {routeSchedules.map(({ schedule, route }: any) => {
                     // Get the stop IDs from the route's stops (in order)
                     const routeStopIds = route.stops.map(s => s.id);
                     // For each day, check if the schedule stops match the route stops

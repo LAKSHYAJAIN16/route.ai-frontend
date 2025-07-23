@@ -6,6 +6,7 @@ import { collection, getDocs } from 'firebase/firestore';
 import { useSearchParams } from 'next/navigation';
 import ReactMarkdown from 'react-markdown';
 import { InsightType } from '../../data';
+import { Suspense } from "react";
 
 // Helper to render data table like in new-chat
 function DataTable({ data }: { data: any }) {
@@ -63,7 +64,7 @@ function AILoadingBubble() {
   );
 }
 
-export default function OpenChat() {
+function OpenChat() {
   const searchParams = useSearchParams();
   const id = searchParams.get('id');
   const [insight, setInsight] = useState<InsightType | undefined>(undefined);
@@ -257,5 +258,13 @@ export default function OpenChat() {
         </div>
       </main>
     </div>
+  );
+}
+
+export default function OpenChatPageWrapper() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <OpenChat />
+    </Suspense>
   );
 } 

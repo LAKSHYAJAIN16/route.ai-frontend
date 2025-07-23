@@ -1,10 +1,16 @@
 "use client";
-import React from "react";
+import React, { useState } from "react";
 import Sidebar from '../../../components/Sidebar';
 import { getRoutes, getSchedules } from '../data';
 import Head from "next/head";
 
 export default function Schedule() {
+  // Add missing state
+  const [routeSchedules, setRouteSchedules] = useState<any[]>([]);
+  const [expanded, setExpanded] = useState<Record<string, boolean>>({});
+  const toggleExpand = (routeId: string, day: string) => {
+    setExpanded(exp => ({ ...exp, [`${routeId}-${day}`]: !exp[`${routeId}-${day}`] }));
+  };
   return (
     <>
       <Head>
@@ -21,7 +27,7 @@ export default function Schedule() {
               <div className="mt-2">
                 <div className="mt-2">
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                    {routeSchedules.map(({ schedule, route }: ScheduleType) => {
+                    {routeSchedules.map(({ schedule, route }: any) => {
                       // Get the stop IDs from the route's stops (in order)
                       const routeStopIds = route.stops.map(s => s.id);
                       // For each day, check if the schedule stops match the route stops

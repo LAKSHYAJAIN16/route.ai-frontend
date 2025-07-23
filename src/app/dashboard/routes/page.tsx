@@ -1,6 +1,6 @@
 'use client';
 
-import React from "react";
+import React, { useState, useMemo } from "react";
 import Sidebar from "../../../components/Sidebar";
 import Map, { NavigationControl, Marker, Popup, Source, Layer } from "react-map-gl/mapbox";
 import "mapbox-gl/dist/mapbox-gl.css";
@@ -36,6 +36,37 @@ function getRouteLengthKm(coords: number[][]) {
 }
 
 export default function RoutesPage() {
+  // Add missing state definitions
+  const [routes, setRoutes] = useState<any[]>([]);
+  const [selectedRouteId, setSelectedRouteId] = useState<string>("");
+  const [loading, setLoading] = useState(false);
+  const selectedRoute = useMemo(() => routes.find((r: any) => r.id === selectedRouteId), [routes, selectedRouteId]);
+  const routeLengthKm = selectedRoute?.routeCoordinates ? getRouteLengthKm(selectedRoute.routeCoordinates) : 0;
+  const estimatedTimeMin = Math.round(routeLengthKm * 2);
+  const [viewState, setViewState] = useState<any>({ longitude: -79.865, latitude: 43.5139, zoom: 12 });
+  const handleMove = (evt: any) => setViewState(evt.viewState);
+  const [hovered, setHovered] = useState<string | null>(null);
+  const lineGeoJSON = useMemo(() => selectedRoute?.routeCoordinates ? {
+    type: "FeatureCollection" as const,
+    features: [
+      {
+        type: "Feature" as const,
+        geometry: {
+          type: "LineString" as const,
+          coordinates: selectedRoute.routeCoordinates,
+        },
+        properties: {},
+      },
+    ],
+  } : null, [selectedRoute]);
+  const lineLayer = useMemo(() => lineGeoJSON ? {
+    id: "route-line",
+    type: "line",
+    source: "route",
+    layout: { "line-join": "round", "line-cap": "round" },
+    paint: { "line-color": "#5f4bb6", "line-width": 4 },
+  } : null, [lineGeoJSON]);
+
   return (
     <>
       <Head>

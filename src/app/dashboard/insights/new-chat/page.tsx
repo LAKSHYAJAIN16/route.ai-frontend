@@ -4,13 +4,27 @@ import Sidebar from '../../../../components/Sidebar';
 import { HiCheckCircle } from 'react-icons/hi';
 import { getFeedbackData, FeedbackType, addInsight } from '../../../dashboard/data';
 import ReactMarkdown from 'react-markdown';
+import { Suspense } from "react";
 
 interface Message {
   sender: 'user' | 'ai';
   text: string;
 }
 
-export default function NewChat() {
+// Helper to parse GPT output into structured insights
+function parseInsights(text: string) {
+  const regex = /\[(positive|negative)\]\[(.*?)\]\[(.*?)\]\[(.*?)\]\[(.*?)\]/gs;
+  const matches = [...text.matchAll(regex)];
+  return matches.map(m => ({
+    sentiment: m[1],
+    title: m[2],
+    content: m[3],
+    recommendation: m[4],
+    data: (() => { try { return JSON.parse(m[5]); } catch { return m[5]; } })(),
+  }));
+}
+
+function NewChat() {
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState("");
   const [selected, setSelected] = useState<string | null>(null);
@@ -690,5 +704,13 @@ export default function NewChat() {
         {/* <form onSubmit={sendMessage} className="flex gap-2 mt-auto"> ... </form> */}
       </main>
     </div>
+  );
+}
+
+export default function NewChatPageWrapper() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <NewChat />
+    </Suspense>
   );
 } 

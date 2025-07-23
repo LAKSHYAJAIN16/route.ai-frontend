@@ -5,6 +5,7 @@ import { HiCheckCircle } from 'react-icons/hi';
 import { FeedbackType, addInsight } from '../../../dashboard/data';
 import ReactMarkdown from 'react-markdown';
 import { useSearchParams } from 'next/navigation';
+import { Suspense } from "react";
 
 interface Message {
   sender: 'user' | 'ai';
@@ -24,7 +25,7 @@ function parseInsights(text: string) {
   }));
 }
 
-export default function FeedbackChat() {
+function FeedbackChat() {
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState("");
   const chatEndRef = useRef<HTMLDivElement>(null);
@@ -441,5 +442,13 @@ export default function FeedbackChat() {
         )}
       </main>
     </div>
+  );
+}
+
+export default function FeedbackChatPageWrapper() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <FeedbackChat />
+    </Suspense>
   );
 } 
