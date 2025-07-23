@@ -10,22 +10,6 @@ interface Message {
   text: string;
 }
 
-const KEY = "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"
-
-// Helper to parse GPT output into structured insights
-function parseInsights(text: string) {
-  // Match all [sentiment][title][content][recommendation][json] blocks
-  const regex = /\[(positive|negative)\]\[(.*?)\]\[(.*?)\]\[(.*?)\]\[(.*?)\]/gs;
-  const matches = [...text.matchAll(regex)];
-  return matches.map(m => ({
-    sentiment: m[1],
-    title: m[2],
-    content: m[3],
-    recommendation: m[4],
-    data: (() => { try { return JSON.parse(m[5]); } catch { return m[5]; } })(),
-  }));
-}
-
 export default function NewChat() {
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState("");
@@ -82,7 +66,7 @@ export default function NewChat() {
     ]);
     try {
       const OpenAI = (await import('openai')).default;
-      const openai = new OpenAI({ apiKey: KEY, dangerouslyAllowBrowser: true });
+      const openai = new OpenAI({ apiKey: process.env.NEXT_PUBLIC_OPENAI_API_KEY, dangerouslyAllowBrowser: true });
       // Convert chatHistory to OpenAI format
       const openaiMessages = chatHistory.map(m => ({
         role: m.sender === 'user' ? 'user' : 'assistant',
@@ -115,7 +99,7 @@ export default function NewChat() {
     ]);
     try {
       const OpenAI = (await import('openai')).default;
-      const openai = new OpenAI({ apiKey: KEY, dangerouslyAllowBrowser: true });
+      const openai = new OpenAI({ apiKey: process.env.NEXT_PUBLIC_OPENAI_API_KEY, dangerouslyAllowBrowser: true });
       const completion = await openai.chat.completions.create({
         model: 'gpt-4o-mini',
         messages: [

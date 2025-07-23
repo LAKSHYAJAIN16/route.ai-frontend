@@ -69,6 +69,7 @@ export default function InsightsPage() {
   type InsightWithDocId = InsightType & { docId: string };
   const [insightItems, setInsightItems] = useState<InsightWithDocId[]>([]);
   const [routeColors, setRouteColors] = useState<Record<string, string>>({});
+  const [loading, setLoading] = useState(true); // Add loading state
   const handleDelete = async (docId: string) => {
     await deleteDoc(doc(db, 'town-milton/insights/insight-collection', docId));
     setInsightItems(items => items.filter(i => i.docId !== docId));
@@ -76,6 +77,7 @@ export default function InsightsPage() {
   const router = useRouter();
   React.useEffect(() => {
     async function fetchData() {
+      setLoading(true); // Start loading
       // Fetch from Firestore
       const snapshot = await getDocs(collection(db, 'town-milton/insights/insight-collection'));
       const insights: InsightWithDocId[] = snapshot.docs.map((docSnap, idx) => {
@@ -95,6 +97,7 @@ export default function InsightsPage() {
       setInsightItems(insights);
       const colors = await getRouteColors();
       setRouteColors(colors);
+      setLoading(false); // End loading
     }
     fetchData();
   }, []);
@@ -119,7 +122,15 @@ export default function InsightsPage() {
                 <span>New Analysis</span>
               </button>
             </div>
-            {insightItems.length === 0 ? (
+            {loading ? (
+              <div className="flex flex-col items-center justify-center py-12">
+                <svg className="animate-spin h-8 w-8 text-[#7c3aed] mb-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"></path>
+                </svg>
+                <span className="text-[#7c88a1] text-base">Loading insights...</span>
+              </div>
+            ) : insightItems.length === 0 ? (
               <div className="text-center text-[#7c88a1] text-base py-12">No insights found. Time to analyse your data!</div>
             ) : (
               <ul className="grid grid-cols-1 md:grid-cols-2 gap-4">

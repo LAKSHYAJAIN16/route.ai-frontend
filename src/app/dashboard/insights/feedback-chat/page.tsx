@@ -11,8 +11,6 @@ interface Message {
   text: string;
 }
 
-const KEY = "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"
-
 // Helper to parse GPT output into structured insights
 function parseInsights(text: string) {
   const regex = /\[(positive|negative)\]\[(.*?)\]\[(.*?)\]\[(.*?)\]\[(.*?)\]/gs;
@@ -107,7 +105,8 @@ export default function FeedbackChat() {
     ]);
     try {
       const OpenAI = (await import('openai')).default;
-      const openai = new OpenAI({ apiKey: KEY, dangerouslyAllowBrowser: true });
+      const openai = new OpenAI({ apiKey: process.env.NEXT_PUBLIC_OPENAI_API_KEY, dangerouslyAllowBrowser: true });
+      console.log(openai);
       const openaiMessages = chatHistory.map(m => ({
         role: m.sender === 'user' ? 'user' : 'assistant',
         content: m.text
@@ -141,7 +140,7 @@ export default function FeedbackChat() {
     });
     try {
       const OpenAI = (await import('openai')).default;
-      const openai = new OpenAI({ apiKey: KEY, dangerouslyAllowBrowser: true });
+      const openai = new OpenAI({ apiKey: process.env.NEXT_PUBLIC_OPENAI_API_KEY, dangerouslyAllowBrowser: true });
       const completion = await openai.chat.completions.create({
         model: 'gpt-4o-mini',
         messages: [
