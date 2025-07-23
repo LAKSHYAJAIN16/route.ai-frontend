@@ -48,6 +48,48 @@ function FeedbackChat() {
   useEffect(() => {
     if (hasInitialized.current) return;
     hasInitialized.current = true;
+    const dataKey = searchParams.get('dataKey');
+    if (dataKey) {
+      // Try to load from sessionStorage
+      try {
+        const dataString = sessionStorage.getItem(dataKey);
+        if (dataString) {
+          const data = JSON.parse(dataString);
+          sessionStorage.removeItem(dataKey);
+          if (Array.isArray(data) && data.length > 0) {
+            setDisplayedData(null);
+            setDataError(null);
+            setChatVisible(true);
+            setMessages([
+              { sender: 'user', text: 'Selected: Feedback' } as Message,
+              { sender: 'user', text: 'Auto-selecting data' } as Message
+            ]);
+            setTimeout(() => {
+              setMessages(msgs => [
+                ...msgs,
+                { sender: 'user', text: 'uploading-data' } as Message
+              ]);
+              setTimeout(() => {
+                setDisplayedData(data);
+                sendToGPT(data, msgs => {
+                  if (!msgs.find(m => m.text === 'Selected: Feedback')) {
+                    return ([{ sender: 'user', text: 'Selected: Feedback' } as Message, ...msgs]);
+                  }
+                  return msgs;
+                });
+              }, 1200);
+            }, 700);
+          } else {
+            setDataError('No data provided.');
+          }
+        } else {
+          setDataError('Data expired or not found. Please try again.');
+        }
+      } catch (e) {
+        setDataError('Failed to load data from session storage.');
+      }
+      return;
+    }
     const dataParam = searchParams.get('data');
     if (dataParam) {
       try {
@@ -60,7 +102,7 @@ function FeedbackChat() {
           // Always start with 'Selected: Feedback' and keep it forever
           setMessages([
             { sender: 'user', text: 'Selected: Feedback' } as Message,
-            { sender: 'user', text: 'Auto-selecting filtered feedback items' } as Message
+            { sender: 'user', text: 'Auto-selecting data' } as Message
           ]);
           setTimeout(() => {
             setMessages(msgs => [
@@ -206,7 +248,7 @@ function FeedbackChat() {
       <Sidebar selected="insights" />
       <main className="flex-1 flex flex-col p-8">
         <div className="flex items-center mb-6 gap-4">
-           <a href="/dashboard/feedback" style={{ textDecoration: 'none' }}>
+           <a href="/dashboard" style={{ textDecoration: 'none' }}>
              <button
                 className="bg-red-500 text-white text-xs font-semibold rounded-full py-1 px-4 hover:bg-red-600 transition-colors"
                 type="button"
@@ -214,7 +256,7 @@ function FeedbackChat() {
                 <span className="mr-1">&#8592;</span>Back
              </button>
            </a>
-           <h2 className="text-2xl font-bold text-[#2d2363] m-0">Insights from Feedback</h2>
+           <h2 className="text-2xl font-bold text-[#2d2363] m-0">Insights from Data</h2>
         </div>
         <div ref={chatContainerRef} className="flex-1 overflow-y-auto bg-white rounded-xl p-6 shadow-sm border flex flex-col gap-4 mb-4" style={{ minHeight: 400, position: 'relative' }}>
           {dataError && (
@@ -229,7 +271,7 @@ function FeedbackChat() {
           <>
           {messages.map((msg, i) => (
             <div key={i} className={`flex ${msg.sender === 'user' ? 'justify-end' : 'justify-start'}`}>
-              {msg.sender === 'user' && (msg.text.startsWith('Selected:') || msg.text === 'Auto-selecting filtered feedback items' || msg.text === 'Auto-selecting active feedback items') ? (
+              {msg.sender === 'user' && (msg.text.startsWith('Selected:') || msg.text === 'Auto-selecting data') ? (
                 <div className="max-w-[70%] px-4 py-2 rounded-2xl text-sm shadow-md border border-blue-500 bg-white text-blue-700 flex items-center gap-2">
                   <HiCheckCircle className="text-blue-500 text-lg" />
                   <span className="font-semibold">{msg.text}</span>
@@ -408,33 +450,101 @@ function FeedbackChat() {
           <div className="fixed inset-0 z-50 flex items-center justify-center backdrop-blur-sm bg-black/20">
             <div className="bg-white rounded-2xl shadow-2xl p-8 w-full max-w-2xl relative">
               <button className="absolute top-3 right-3 text-lg text-gray-400 hover:text-gray-700" onClick={() => setShowDataModal(false)}>&times;</button>
-              <div className="text-lg font-bold text-[#2d2363] mb-3">Data Preview</div>
+              <div className="text-lg font-bold text-black mb-3">Data Preview</div>
               {displayedData && displayedData.length === 0 ? (
                 <div className="text-gray-400 text-sm">No data to display.</div>
               ) : (
-                <div className="overflow-x-auto">
-                  <table className="min-w-full text-xs text-black">
-                    <thead>
-                      <tr className="text-black text-left border-b">
-                        <th className="py-2 px-2 font-semibold">Date</th>
-                        <th className="py-2 px-2 font-semibold">Time</th>
-                        <th className="py-2 px-2 font-semibold">Route</th>
-                        <th className="py-2 px-2 font-semibold">Remarks</th>
-                        <th className="py-2 px-2 font-semibold">Rating</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {displayedData?.map((f, i) => (
-                        <tr key={i} className="border-b last:border-0 text-black">
-                          <td className="py-1 px-2 text-black">{f.date}</td>
-                          <td className="py-1 px-2 text-black">{f.time}</td>
-                          <td className="py-1 px-2 text-black">{f.route}</td>
-                          <td className="py-1 px-2 text-black">{f.remarks}</td>
-                          <td className="py-1 px-2 text-black">{f.rating}</td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
+                <div className="overflow-x-auto max-h-[400px] overflow-y-auto flex flex-col gap-8">
+                  {Array.isArray(displayedData) && displayedData.length > 0 && typeof displayedData[0] === 'object' && (
+                    // Check if this is likely feedback data (has id, time, date, remarks, route, etc.)
+                    (displayedData[0].id !== undefined && displayedData[0].time !== undefined && displayedData[0].date !== undefined && displayedData[0].remarks !== undefined && displayedData[0].route !== undefined) ? (
+                      <div className="mb-8">
+                        <div className="mb-2 text-black">Feedback Data</div>
+                        <div className="max-h-[400px] overflow-y-auto">
+                          <table className="min-w-full text-xs text-black border mb-2">
+                            <thead>
+                              <tr className="text-black text-left border-b">
+                                {Object.keys(displayedData[0]).map((k, i) => (
+                                  <th key={i} className="py-2 px-2 font-semibold whitespace-nowrap text-black">{k.charAt(0).toUpperCase() + k.slice(1)}</th>
+                                ))}
+                              </tr>
+                            </thead>
+                            <tbody>
+                              {displayedData.map((row: any, i: number) => (
+                                <tr key={i} className="border-b last:border-0 text-black">
+                                  {Object.values(row).map((v: any, j: number) => (
+                                    <td key={j} className="py-1 px-2 text-black whitespace-nowrap">{String(v)}</td>
+                                  ))}
+                                </tr>
+                              ))}
+                            </tbody>
+                          </table>
+                        </div>
+                      </div>
+                    ) : null
+                  )}
+                  {Array.isArray(displayedData) && (!displayedData[0] || displayedData[0].id === undefined || displayedData[0].time === undefined || displayedData[0].date === undefined || displayedData[0].remarks === undefined || displayedData[0].route === undefined) && displayedData.map((item: any, idx: number) => {
+                    const isScrollable = Array.isArray(item.value) && item.value.length > 8;
+                    if (Array.isArray(item.value) && item.value.length > 0 && typeof item.value[0] === 'object') {
+                      return (
+                        <div key={idx}>
+                          <div className="mb-2 text-black">{item.label || item.key || `Data ${idx+1}`}</div>
+                          <table className="min-w-full text-xs text-black border mb-2">
+                            <thead>
+                              <tr className="text-black text-left border-b">
+                                {Object.keys(item.value[0]).map((k, i) => (
+                                  <th key={i} className="py-2 px-2 font-semibold whitespace-nowrap text-black">{k.charAt(0).toUpperCase() + k.slice(1)}</th>
+                                ))}
+                              </tr>
+                            </thead>
+                          </table>
+                          <div className={isScrollable ? "max-h-[350px] overflow-y-auto" : ""}>
+                            <table className="min-w-full text-xs text-black border mb-2">
+                              <tbody>
+                                {item.value.map((row: any, i: number) => (
+                                  <tr key={i} className="border-b last:border-0 text-black">
+                                    {Object.values(row).map((v: any, j: number) => (
+                                      <td key={j} className="py-1 px-2 text-black whitespace-nowrap">{String(v)}</td>
+                                    ))}
+                                  </tr>
+                                ))}
+                              </tbody>
+                            </table>
+                          </div>
+                        </div>
+                      );
+                    }
+                    if (item.value && typeof item.value === 'object') {
+                      return (
+                        <div key={idx}>
+                          <div className="mb-2 text-black">{item.label || item.key || `Data ${idx+1}`}</div>
+                          <table className="min-w-full text-xs text-black border mb-2">
+                            <tbody>
+                              {Object.entries(item.value).map(([k, v], i) => (
+                                <tr key={i} className="border-b last:border-0 text-black">
+                                  <td className="py-1 px-2 text-black font-semibold whitespace-nowrap">{k.charAt(0).toUpperCase() + k.slice(1)}</td>
+                                  <td className="py-1 px-2 text-black whitespace-nowrap">{String(v)}</td>
+                                </tr>
+                              ))}
+                            </tbody>
+                          </table>
+                        </div>
+                      );
+                    }
+                    return (
+                      <div key={idx}>
+                        <div className="mb-2 text-black">{item.label || item.key || `Data ${idx+1}`}</div>
+                        <table className="min-w-full text-xs text-black border mb-2">
+                          <tbody>
+                            <tr>
+                              <td className="py-1 px-2 text-black font-semibold whitespace-nowrap">Value</td>
+                              <td className="py-1 px-2 text-black whitespace-nowrap">{String(item.value)}</td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    );
+                  })}
                 </div>
               )}
             </div>

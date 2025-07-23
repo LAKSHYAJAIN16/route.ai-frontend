@@ -12,12 +12,12 @@ export default function Home() {
     if (link) (link as HTMLLinkElement).href = "/favicon.ico";
   }, []);
   return (
-    <div className="min-h-screen bg-white flex flex-col overflow-x-hidden">
+    <div className="bg-white flex flex-col min-h-screen">
       {/* Navigation Bar */}
       <Navbar />
 
       {/* Hero Section */}
-      <section className="flex flex-col items-center justify-center flex-1 text-center px-4 relative pt-8 pb-0 md:pb-8">
+      <section className="flex-1 flex flex-col items-center justify-center text-center px-4 relative pt-8 pb-0 md:pb-8">
         <div className="relative z-10 flex flex-col items-center">
           <div className="relative z-50">
             <h1
@@ -37,7 +37,7 @@ export default function Home() {
             </h1>
           </div>
           <p className="text-lg md:text-xl text-[#404040] mb-6 md:mb-7">You ride the bus. We make it better.</p>
-          <a href="#" className="bg-[#7c3aed] hover:bg-[#5b21b6] text-white font-semibold px-8 py-3 rounded-full text-lg shadow-lg transition mb-0 focus:outline-none focus:ring-2 focus:ring-[#7c3aed] focus:ring-opacity-50">Contact Us</a>
+          <a href="/signup" className="bg-[#7c3aed] hover:bg-[#5b21b6] text-white font-semibold px-8 py-3 rounded-full text-lg shadow-lg transition mb-0 focus:outline-none focus:ring-2 focus:ring-[#7c3aed] focus:ring-opacity-50">Contact Us</a>
 
           {/* Showcase Section */}
           <div className="flex flex-col items-center -mt-4">
@@ -80,7 +80,7 @@ export default function Home() {
                 />
               </div>
               {/* Laptop content (dashboard) - ON TOP of the frame, visually clipped to screen area */}
-              <div className="absolute left-1/2 top-[18%] w-[520px] h-[340px] -translate-x-1/2 mt-[40px] z-30 overflow-hidden rounded-[32px] shadow-lg" style={{boxShadow: '0 2px 12px rgba(0,0,0,0.06)'}}>
+              <div className="absolute left-1/2 top-[18%] w-[520px] h-[340px] -translate-x-1/2 mt-[32px] z-30 overflow-hidden rounded-[3px] shadow-lg" style={{boxShadow: '0 2px 12px rgba(0,0,0,0.06)'}}>
                 <Image
                   src="/laptop-content.png"
                   alt="Dashboard screenshot"
@@ -91,18 +91,18 @@ export default function Home() {
               </div>
               {/* Mobile frame and content - fully on top, bottom of phone aligned with bottom of laptop */}
               <div className="absolute left-1/2 top-[18%] w-[676px] h-[416px] -translate-x-1/2 z-40 pointer-events-none select-none">
-                <div className="absolute right-8 bottom-0 w-[140px] h-[280px] z-40 flex flex-col items-center hidden md:block">
+                <div className="absolute right-8 bottom-0 w-[140px] h-[280px] flex flex-col items-center  md:block">
                   {/* Mobile frame */}
                   <Image
                     src="/mobile-frame.png"
                     alt="Mobile frame"
                     fill
                     style={{objectFit: 'contain'}}
-                    className="z-40"
+                    className="z-50"
                     priority
                   />
                   {/* Mobile content (feedback UI) */}
-                  <div className="absolute left-[10%] top-[7%] w-[80%] h-[86%] z-50 overflow-hidden rounded-xl">
+                  <div className="absolute left-[7%] top-[3%] w-[85%] h-[100%] z-40 overflow-hidden rounded-xl">
                     <Image
                       src="/mobile-content.png"
                       alt="Mobile feedback UI"
@@ -115,6 +115,20 @@ export default function Home() {
                 </div>
               </div>
             </div>
+          </div>
+        </div>
+      </section>
+      {/* Precis Section */}
+      <section className="w-full flex justify-center items-center py-12">
+        <div className="w-full max-w-4xl min-h-[250px] bg-[#2d1e7b] rounded-lg flex flex-col justify-center items-center p-8">
+          <h2 className="text-white text-lg tracking-widest mb-4">PRECIS</h2>
+          <div className="w-full flex justify-center">
+            <iframe
+              src="https://docs.google.com/document/d/e/2PACX-1vS3uWhmGrWUogaHajO22EXpdlAptP9djcsNfmGdtdQqMRpFSfpVAJAJ-YHafTDLu1l8LiMuO6T6tjpN/pub?embedded=true"
+              style={{ width: '100%', minHeight: '500px', background: 'purple' }}
+              allowFullScreen
+              title="Precis Document"
+            ></iframe>
           </div>
         </div>
       </section>

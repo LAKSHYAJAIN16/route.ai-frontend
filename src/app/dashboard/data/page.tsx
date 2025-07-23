@@ -11,6 +11,8 @@ import { useState } from 'react';
 import { Marker } from 'react-map-gl/mapbox';
 import { getRoutes } from '../data';
 import Head from "next/head";
+import { useRouter } from 'next/navigation';
+import { v4 as uuidv4 } from "uuid";
 
 // Mock data
 const waitingTime = 12; // min
@@ -102,9 +104,14 @@ export default function DataPage() {
   const [selectedDisplay, setSelectedDisplay] = useState('all');
   const [selectedTime, setSelectedTime] = useState('today');
   const [selectedMode, setSelectedMode] = useState('heatmap');
+  const router = useRouter();
   const [showInsightModal, setShowInsightModal] = useState(false);
   const [selectedDataItems, setSelectedDataItems] = useState<string[]>([]);
   const [selectionEnabled, setSelectionEnabled] = useState(false); // NEW: controls if selection is allowed
+  const [routesData, setRoutesData] = useState<any[] | null>(null);
+  React.useEffect(() => {
+    getRoutes().then(setRoutesData);
+  }, []);
 
   // Helper to toggle selection for any card
   const toggleSelect = (key: string) => {
@@ -127,12 +134,13 @@ export default function DataPage() {
           <div className="bg-white rounded-xl p-8 shadow-sm border mb-8 max-w-7xl mx-auto">
             <div className="flex items-center mb-5">
               <h1 className="text-3xl font-bold text-[#2d2363] mr-2">Data</h1>
-              {/* Only show Generate Insights button if selection is not enabled */}
               {!selectionEnabled && (
                 <button
                   className="ml-3 px-5 py-2 rounded-full font-semibold text-white shadow-md bg-gradient-to-r from-purple-500 via-pink-500 to-yellow-400 focus:outline-none text-base cursor-pointer transition-all duration-300 hover:scale-105 animated-gradient"
                   style={{ letterSpacing: '0.02em', boxShadow: '0 2px 8px 0 rgba(80, 0, 80, 0.10)' }}
-                  onClick={() => setSelectionEnabled(true)}
+                  onClick={() => {
+                    setSelectionEnabled(true);
+                  }}
                 >
                   Generate Insights
                 </button>
@@ -294,7 +302,7 @@ export default function DataPage() {
                 </div>
               </div>
               <div className="w-full h-[500px] md:h-[600px] bg-[#f7f8fa] rounded-xl overflow-hidden">
-                <HeatmapTripsFullWidth selectedRoute={selectedRoute} selectedDisplay={selectedDisplay} selectedTime={selectedTime} selectedMode={selectedMode} />
+                <HeatmapTripsFullWidth selectedRoute={selectedRoute} selectedDisplay={selectedDisplay} selectedTime={selectedTime} selectedMode={selectedMode} routesData={routesData} />
               </div>
             </div>
           </div>
@@ -307,7 +315,155 @@ export default function DataPage() {
                 className="bg-gradient-to-r from-purple-500 via-pink-500 to-yellow-400 text-white text-base font-semibold rounded-full py-2 px-8 shadow-md focus:outline-none cursor-pointer transition-all duration-300 hover:scale-105 animated-gradient"
                 style={{ letterSpacing: '0.02em', boxShadow: '0 2px 8px 0 rgba(80, 0, 80, 0.10)' }}
                 disabled={selectedDataItems.length === 0}
-                onClick={() => {/* Next step logic here */}}
+                onClick={() => {
+                  // Prevent export if routesData is not loaded and tripHeatmap is selected
+                  if (selectedDataItems.includes('tripHeatmap') && !routesData) {
+                    alert('Map data is still loading. Please wait a moment and try again.');
+                    return;
+                  }
+                  // Collect only the selected data items and send as array of objects
+                  const allData = {
+                    waitingTime: { label: 'Avg. Waiting Time', value: waitingTime, unit: 'min' },
+                    routeTime: { label: 'Avg. Route Time', value: routeTime, unit: 'min' },
+                    peopleWaiting: { label: 'People Waiting', value: peopleWaiting },
+                    salesToday: { label: 'Sales Today', value: salesToday },
+                    peopleByHourData: { label: 'Riders by Hour', value: peopleByHourData },
+                    salesByHourData: { label: 'Sales by Hour', value: salesByHourData },
+                    heatmapStops: { label: 'Heatmap Stops', value: heatmapStops },
+                    peopleWaitingList: { label: 'People Waiting List', value: peopleWaitingList },
+                    commonDestinations: { label: 'Common Destinations', value: commonDestinations },
+                    liveBuses: { label: 'Live Buses', value: liveBuses },
+                    recentFeedback: { label: 'Recent Feedback', value: recentFeedback },
+                    alerts: { label: 'Alerts', value: alerts }
+                  };
+                  // Special handling for tripHeatmap selection
+                  let tripHeatmapPoints: any[] = [];
+                  if (selectedDataItems.includes('tripHeatmap')) {
+                    // Reproduce the points logic from HeatmapTripsFullWidth
+                    let filteredTrips = demoTrips;
+                    if (selectedRoute !== 'all') {
+                      filteredTrips = demoTrips.filter(trip => trip.routeId === selectedRoute);
+                    }
+                    // Build points array based on display type
+                    let pts: { lng: number; lat: number; type: string; tripId: string }[] = [];
+                    function findStopLatLng(routeId: string, stopId: string | undefined) {
+                      if (!Array.isArray(routesData)) return undefined;
+                      const route = routesData.find((r: any) => r.id === routeId);
+                      if (!route || !Array.isArray(route.stops)) return undefined;
+                      const stop = route.stops.find((s: any) => s.id === stopId);
+                      if (!stop) return undefined;
+                      return { lat: stop.lat, lng: stop.lng };
+                    }
+                    filteredTrips.forEach(trip => {
+                      // a) Starting position
+                      pts.push({ lng: trip.startLng, lat: trip.startLat, type: 'start-position', tripId: trip.id });
+                      // b) Starting bus stop
+                      const startStop = findStopLatLng(trip.routeId, trip.startStopId);
+                      if (startStop) {
+                        pts.push({ lng: startStop.lng, lat: startStop.lat, type: 'start-stop', tripId: trip.id });
+                      }
+                      // c) Ending bus stop
+                      const endStop = findStopLatLng(trip.routeId, trip.endStopId);
+                      if (endStop) {
+                        pts.push({ lng: endStop.lng, lat: endStop.lat, type: 'end-stop', tripId: trip.id });
+                      }
+                    });
+                    // Optionally filter by display type
+                    if (selectedDisplay === 'start-location') {
+                      pts = pts.filter(pt => pt.type === 'start-position');
+                    } else if (selectedDisplay === 'start-stop') {
+                      pts = pts.filter(pt => pt.type === 'start-stop');
+                    } else if (selectedDisplay === 'end-stop') {
+                      pts = pts.filter(pt => pt.type === 'end-stop');
+                    }
+                    tripHeatmapPoints = pts;
+                  }
+                  // Compose the array to send
+                  const selectedDataArr = selectedDataItems.map(key => {
+                    if (key === 'tripHeatmap') {
+                      return {
+                        key,
+                        label: 'Trip Heatmap Points',
+                        value: tripHeatmapPoints,
+                        filters: {
+                          selectedRoute,
+                          selectedDisplay,
+                          selectedTime,
+                          selectedMode
+                        }
+                      };
+                    }
+                    // Map UI selection keys to data arrays
+                    if (key === 'ridersByHour' && Array.isArray(peopleByHourData) && peopleByHourData.length > 0) {
+                      console.log('Exporting peopleByHourData:', peopleByHourData);
+                      return {
+                        key,
+                        label: 'Riders by Hour',
+                        value: peopleByHourData,
+                        filters: {
+                          selectedRoute,
+                          selectedDisplay,
+                          selectedTime,
+                          selectedMode
+                        }
+                      };
+                    }
+                    if (key === 'salesByHour' && Array.isArray(salesByHourData) && salesByHourData.length > 0) {
+                      console.log('Exporting salesByHourData:', salesByHourData);
+                      return {
+                        key,
+                        label: 'Sales by Hour',
+                        value: salesByHourData,
+                        filters: {
+                          selectedRoute,
+                          selectedDisplay,
+                          selectedTime,
+                          selectedMode
+                        }
+                      };
+                    }
+                    if (allData[key] && key !== 'peopleByHourData' && key !== 'salesByHourData') {
+                      return {
+                        key,
+                        ...allData[key],
+                        filters: {
+                          selectedRoute,
+                          selectedDisplay,
+                          selectedTime,
+                          selectedMode
+                        }
+                      };
+                    }
+                    return null;
+                  }).filter(Boolean);
+                  if (!selectedDataArr.length) {
+                    alert('No data selected or available to send.');
+                    return;
+                  }
+                  const dataString = JSON.stringify(selectedDataArr);
+                  console.log('Selected Data Array:', selectedDataArr);
+                  console.log('Data String:', dataString);
+                  if (dataString.length > 1800) {
+                    try {
+                      if (typeof window !== 'undefined' && window.sessionStorage) {
+                        const storageKey = `insights-data-${uuidv4()}`;
+                        sessionStorage.setItem(storageKey, dataString);
+                        console.log('Navigating with dataKey:', storageKey);
+                        setTimeout(() => {
+                          router.push(`/dashboard/insights/feedback-chat?dataKey=${storageKey}`);
+                        }, 50);
+                      } else {
+                        alert('Session storage is not available. Please use a modern browser.');
+                      }
+                    } catch (e) {
+                      alert('Failed to store data for transfer. Please try again.');
+                    }
+                  } else {
+                    const dataParam = encodeURIComponent(dataString);
+                    console.log('Navigating with data param:', `/dashboard/insights/feedback-chat?data=${dataParam}`);
+                    router.push(`/dashboard/insights/feedback-chat?data=${dataParam}`);
+                  }
+                }}
               >
                 Next
               </button>
@@ -334,9 +490,8 @@ type HoveredPoint = {
   tripId: string;
 } | null;
 
-function HeatmapTripsFullWidth({ selectedRoute, selectedDisplay, selectedTime, selectedMode }: { selectedRoute: string, selectedDisplay: string, selectedTime: string, selectedMode: string }) {
+function HeatmapTripsFullWidth({ selectedRoute, selectedDisplay, selectedTime, selectedMode, routesData }: { selectedRoute: string, selectedDisplay: string, selectedTime: string, selectedMode: string, routesData: any[] | null }) {
   // All hooks at the top!
-  const [routesData, setRoutesData] = React.useState<any[] | null>(null);
   const [hoveredIdx, setHoveredIdx] = React.useState<number | null>(null);
   const [hovered, setHovered] = React.useState<HoveredPoint>(null);
   const [viewState, setViewState] = React.useState({
@@ -345,7 +500,8 @@ function HeatmapTripsFullWidth({ selectedRoute, selectedDisplay, selectedTime, s
     zoom: 12,
   });
   React.useEffect(() => {
-    getRoutes().then(setRoutesData);
+    // This useEffect is now redundant as routesData is passed as a prop
+    // getRoutes().then(setRoutesData);
   }, []);
 
   const points = React.useMemo(() => {

@@ -25,6 +25,11 @@ body {
   font-family: 'DM Sans', sans-serif;
 }
 
+html, body {
+  height: 100%;
+  overflow-x: hidden;
+}
+
 @keyframes gradientMove {
   0% {
     background-position: 0% 50%;
