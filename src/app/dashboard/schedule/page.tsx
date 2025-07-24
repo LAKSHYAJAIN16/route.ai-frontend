@@ -1,18 +1,34 @@
 "use client";
 import React, { useState } from "react";
 import Sidebar from '../../../components/Sidebar';
-import { getRoutes, getSchedules } from '../data';
+import { getRoutes, getSchedules, Route } from '../data';
+import type { Schedule } from '../data';
 import Head from "next/head";
 
 export default function Schedule() {
   // Add missing state
-  const [routeSchedules, setRouteSchedules] = useState<any[]>([]);
+  const [routeSchedules, setRouteSchedules] = useState<{ route: Route; schedule: Schedule }[]>([]);
   const [expanded, setExpanded] = useState<Record<string, boolean>>({});
   const toggleExpand = (routeId: string, day: string) => {
     setExpanded(exp => ({ ...exp, [`${routeId}-${day}`]: !exp[`${routeId}-${day}`] }));
   };
+
+  React.useEffect(() => {
+    async function fetchData() {
+      const [routes, schedules] = await Promise.all([getRoutes(), getSchedules()]);
+      // Match schedules to routes by routeId
+      const combined = routes.map(route => {
+        const schedule = schedules.find(s => s.routeId === route.id);
+        return schedule ? { route, schedule } : null;
+      }).filter((item): item is { route: Route; schedule: Schedule } => !!item);
+      setRouteSchedules(combined);
+    }
+    fetchData();
+  }, []);
   return (
     <>
+      <title>Schedule</title>
+      <link rel="icon" href="/favicon.ico" />
       <Head>
         <title>Schedule</title>
         <link rel="icon" href="/favicon.ico" />
@@ -27,7 +43,7 @@ export default function Schedule() {
               <div className="mt-2">
                 <div className="mt-2">
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                    {routeSchedules.map(({ schedule, route }: any) => {
+                    {routeSchedules.map(({ schedule, route }) => {
                       // Get the stop IDs from the route's stops (in order)
                       const routeStopIds = route.stops.map(s => s.id);
                       // For each day, check if the schedule stops match the route stops
@@ -43,7 +59,7 @@ export default function Schedule() {
                           <div className="font-bold text-[#2d2363] mb-2 text-lg flex items-center justify-between">
                             {route.name}
                           </div>
-                          {schedule.days.map((day: { day: string; stops: string[]; times: string[][]; }, idx: number) => {
+                          {schedule.days.map((day, idx) => {
                             const isExpanded = expanded[`${route.id}-${day.day}`];
                             const showRows = isExpanded ? day.times.length : 6;
                             // Add margin-top to the first weekend table (Saturday or Sunday) if it is not the first day

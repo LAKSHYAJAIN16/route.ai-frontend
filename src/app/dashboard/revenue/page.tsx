@@ -51,10 +51,8 @@ const revenueTrendData = [
 export default function Revenue() {
   return (
     <>
-      <Head>
-        <title>Revenue</title>
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
+      <title>Revenue</title>
+      <link rel="icon" href="/favicon.ico" />
       <div className="bg-[#f7f8fa] flex font-sans min-h-screen">
         <Sidebar selected="revenue" />
         <main className="flex-1 p-8">

@@ -1,5 +1,6 @@
 import React from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { FiGrid, FiDatabase, FiHeart, FiMessageSquare, FiSliders, FiMap, FiClock, FiBarChart2, FiEye, FiDollarSign, FiTrendingUp, FiPower } from "react-icons/fi";
 
 type SidebarProps = {
@@ -23,9 +24,18 @@ const navItemsMiddle = [
 ];
 
 export default function Sidebar({ selected }: SidebarProps) {
+  const router = useRouter();
   return (
     <aside className="w-64 bg-white border-r flex flex-col py-8 px-4 sticky top-0 h-screen">
-      <div className="text-3xl font-extrabold text-[#2d2363] mb-4 text-center w-full tracking-tight">route.ai</div>
+      <div
+        className="text-3xl font-extrabold text-[#2d2363] mb-4 text-center w-full tracking-tight cursor-pointer"
+        onClick={() => router.push('/dashboard')}
+        role="button"
+        tabIndex={0}
+        aria-label="Go to dashboard"
+      >
+        route.ai
+      </div>
       <nav className="flex-1 flex flex-col gap-2">
         {navItemsTop.map((item) => (
           <Link
@@ -69,10 +79,13 @@ export default function Sidebar({ selected }: SidebarProps) {
         ))}
       </nav>
       <div className="border-t my-4" />
-      <a className="mt-auto flex items-center gap-3 px-4 py-2 rounded-lg text-[#b0b0b0] hover:bg-[#f7f6fa]" href="#">
+      <button
+        className="mt-auto flex items-center gap-3 px-4 py-2 rounded-lg text-[#b0b0b0] hover:bg-[#f7f6fa] cursor-pointer w-full text-left"
+        onClick={() => router.push('/')}
+      >
         <span className="text-lg"><FiPower /></span>
         Logout
-      </a>
+      </button>
     </aside>
   );
 } 

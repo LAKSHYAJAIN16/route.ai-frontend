@@ -4,6 +4,7 @@ import Sidebar from '../../../components/Sidebar';
 import { useRouter } from 'next/navigation';
 import { getFeedbackData, getRouteColors } from '../data';
 import { useEffect } from "react";
+import Head from "next/head";
 
 // Define Feedback type
 interface FeedbackType {
@@ -139,6 +140,8 @@ export default function Feedback() {
 
   return (
     <>
+      <title>Feedback</title>
+      <link rel="icon" href="/favicon.ico" />
       <div className="bg-[#f7f8fa] flex font-sans min-h-screen">
         <Sidebar selected="feedback" />
         <main className="flex-1 p-8">

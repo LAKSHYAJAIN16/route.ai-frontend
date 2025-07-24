@@ -4,6 +4,7 @@ import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianG
 import Sidebar from '../../components/Sidebar';
 import { getFeedbackData } from "./data";
 import { routes } from "./data";
+import Head from "next/head";
 
 const stats = [
   {
@@ -141,6 +142,10 @@ export default function Dashboard() {
 
   return (
     <>
+      <Head>
+        <title>Dashboard</title>
+        <link rel="icon" href="/favicon.ico" />
+      </Head>
       <div className="bg-[#f7f8fa] flex font-sans">
       {/* Sidebar */}
       <Sidebar selected="dashboard" />

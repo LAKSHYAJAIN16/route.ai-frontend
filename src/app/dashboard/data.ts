@@ -349,12 +349,40 @@ export async function getInsightsData(): Promise<InsightType[]> {
   return snapshot.docs.map(doc => doc.data() as InsightType);
 }
 
-export async function getRoutes(): Promise<any[]> {
+// Add Route and Schedule types for fetching
+export interface Stop {
+  id: string;
+  label: string;
+  lat: number;
+  lng: number;
+}
+
+export interface Route {
+  id: string;
+  name: string;
+  color: string;
+  stops: Stop[];
+  routeCoordinates: number[][];
+}
+
+export interface ScheduleDay {
+  day: string;
+  stops: string[];
+  times: string[][];
+}
+
+export interface Schedule {
+  id: string;
+  routeId: string;
+  days: ScheduleDay[];
+}
+
+export async function getRoutes(): Promise<Route[]> {
   const snapshot = await getDocs(collection(db, 'town-milton/routes/route-collection'));
   return snapshot.docs.map(doc => {
     const data = doc.data();
-    if ('json' in data) return JSON.parse(data.json);
-    return data;
+    if ('json' in data) return JSON.parse(data.json) as Route;
+    return data as Route;
   });
 }
 
@@ -373,12 +401,12 @@ export async function getBuses(): Promise<Bus[]> {
   return snapshot.docs.map(doc => doc.data() as Bus);
 }
 
-export async function getSchedules(): Promise<any[]> {
+export async function getSchedules(): Promise<Schedule[]> {
   const snapshot = await getDocs(collection(db, 'town-milton/schedules/schedule-collection'));
   return snapshot.docs.map(doc => {
     const data = doc.data();
-    if ('json' in data) return JSON.parse(data.json);
-    return data;
+    if ('json' in data) return JSON.parse(data.json) as Schedule;
+    return data as Schedule;
   });
 }
 

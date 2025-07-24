@@ -103,10 +103,8 @@ export default function InsightsPage() {
   }, []);
   return (
     <>
-      <Head>
-        <title>Insights</title>
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
+      <title>Insights</title>
+      <link rel="icon" href="/favicon.ico" />
       <div className="bg-[#f7f8fa] flex font-sans min-h-screen">
         <Sidebar selected="insights" />
         <main className="flex-1 flex flex-col p-8">
