@@ -1,0 +1,74 @@
+"use client";
+import Navbar from '../../components/Navbar';
+import Image from 'next/image';
+
+export default function MobilePage() {
+  // Phone frame dimensions
+  const frameWidth = 300;
+  const frameHeight = 600;
+  return (
+    <>
+      <title>Mobile Preview</title>
+      <link rel="icon" href="/favicon.ico" />
+      <div className="min-h-screen bg-white flex flex-col font-sans">
+        <Navbar />
+        <section className="flex flex-col items-center justify-center flex-1 px-4 relative mt-4">
+          <div className="text-xs tracking-widest text-[#b0b0b0] mb-2">MOBILE PREVIEW</div>
+          <h1 className="text-4xl md:text-5xl font-extrabold text-[#2d2363] mb-3 leading-tight">
+            <span
+              className="inline-block bg-gradient-to-r from-purple-500 via-pink-500 to-yellow-400 bg-clip-text text-transparent relative font-extrabold shimmer-gradient"
+              style={{
+                WebkitBackgroundClip: 'text',
+                backgroundClip: 'text',
+                filter: 'brightness(1.2)'
+              }}
+            >
+              Try route.ai on mobile
+            </span>
+          </h1>
+          <div className="w-full max-w-md flex flex-col items-center">
+            <div
+              className="bg-[#f7f6fa] rounded-3xl shadow-lg flex flex-col items-center"
+              style={{ padding: 0, width: frameWidth + 24, height: frameHeight + 24, display: 'flex', justifyContent: 'center' }}
+            >
+              <div className="relative" style={{ width: frameWidth, height: frameHeight }}>
+                <iframe
+                  src="https://route-ai-mobile.vercel.app/"
+                  title="Route AI Mobile"
+                  className="absolute top-0 left-0 rounded-3xl border-none z-10 bg-white hide-scrollbar"
+                  style={{ width: frameWidth, height: frameHeight, boxShadow: '0 2px 16px rgba(0,0,0,0.10)', overflow: 'auto' }}
+                />
+                <Image
+                  src="/mobile-frame.png"
+                  alt="iPhone X Frame"
+                  fill
+                  className="z-20 pointer-events-none select-none"
+                  style={{ objectFit: 'contain' }}
+                  priority
+                />
+              </div>
+            </div>
+          </div>
+          {/* Download Android Build Button */}
+          <a
+            href="https://expo.dev/accounts/thereallakshyajain16/projects/route-ai-mobile-app/builds/0cacd485-34b0-427b-952f-1bd976240bbf"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="mt-6 inline-block bg-[#7c3aed] hover:bg-[#5b21b6] text-white font-semibold px-8 py-3 rounded-full text-lg shadow-lg transition focus:outline-none focus:ring-2 focus:ring-[#7c3aed] focus:ring-opacity-50"
+          >
+            Download Android Build
+          </a>
+        </section>
+      </div>
+      <style jsx global>{`
+        .hide-scrollbar::-webkit-scrollbar {
+          display: none;
+        }
+        .hide-scrollbar {
+          -ms-overflow-style: none;
+          scrollbar-width: none;
+        }
+      `}</style>
+    </>
+  );
+} 
