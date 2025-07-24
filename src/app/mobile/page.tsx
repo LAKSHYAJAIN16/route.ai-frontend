@@ -31,36 +31,54 @@ export default function MobilePage() {
             <p className="text-sm text-gray-500 mb-4 text-center max-w-md">
               This is a live preview of the route.ai mobile web app, shown inside a phone frame. You can interact with it just like on a real device—scroll, tap, and explore the features. For the full native experience, use the download button below to install the Android app.
             </p>
-            <div
-              className="bg-[#f7f6fa] rounded-3xl shadow-lg flex flex-col items-center"
-              style={{ padding: 0, width: frameWidth + 24, height: frameHeight + 24, display: 'flex', justifyContent: 'center' }}
-            >
-              <div className="relative" style={{ width: frameWidth, height: frameHeight }}>
-                <iframe
-                  src="https://route-ai-mobile.vercel.app/"
-                  title="Route AI Mobile"
-                  className="absolute top-0 left-0 rounded-3xl border-none z-10 bg-white hide-scrollbar"
-                  style={{ width: frameWidth, height: frameHeight, boxShadow: '0 2px 16px rgba(0,0,0,0.10)', overflow: 'auto' }}
-                />
-                <Image
-                  src="/mobile-frame.png"
-                  alt="iPhone X Frame"
-                  fill
-                  className="z-20 pointer-events-none select-none"
-                  style={{ objectFit: 'contain' }}
-                  priority
-                />
+            <div className="flex flex-row items-center justify-center gap-24 w-full">
+              <div
+                className="bg-[#f7f6fa] rounded-3xl shadow-lg flex flex-col items-center"
+                style={{ padding: 0, width: frameWidth + 24, height: frameHeight + 24, display: 'flex', justifyContent: 'center' }}
+              >
+                <div className="relative" style={{ width: frameWidth, height: frameHeight }}>
+                  <iframe
+                    src="https://route-ai-mobile.vercel.app/"
+                    title="Route AI Mobile"
+                    className="absolute top-0 left-0 rounded-3xl border-none z-10 bg-white hide-scrollbar"
+                    style={{ width: frameWidth, height: frameHeight, boxShadow: '0 2px 16px rgba(0,0,0,0.10)', overflow: 'auto' }}
+                  />
+                  <Image
+                    src="/mobile-frame.png"
+                    alt="iPhone X Frame"
+                    fill
+                    className="z-20 pointer-events-none select-none"
+                    style={{ objectFit: 'contain' }}
+                    priority
+                  />
+                </div>
+              </div>
+              {/* Download Android Build Button */}
+              <div className="flex flex-col items-center gap-8 w-full">
+                <a
+                  href="https://expo.dev/accounts/thereallakshyajain16/projects/route-ai-mobile-app/builds/0cacd485-34b0-427b-952f-1bd976240bbf"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-full max-w-[320px] text-center bg-[#7c3aed] hover:bg-[#5b21b6] text-white font-semibold px-8 py-3 rounded-full text-lg shadow-lg transition focus:outline-none focus:ring-2 focus:ring-[#7c3aed] focus:ring-opacity-50"
+                  style={{ whiteSpace: 'nowrap' }}
+                >
+                  Download Android Build
+                </a>
+                <a
+                  href="https://route-ai-mobile.vercel.app/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-full max-w-[320px] inline-flex items-center justify-center gap-2 bg-white border border-[#7c3aed] hover:bg-[#f3e8ff] text-[#7c3aed] font-semibold px-8 py-3 rounded-full text-base shadow transition focus:outline-none focus:ring-2 focus:ring-[#7c3aed] focus:ring-opacity-50"
+                  style={{ whiteSpace: 'nowrap' }}
+                >
+                  Open Mobile View in New Tab
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-5 h-5">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 6H19.5V12M19.5 6L10.5 15M6 19.5H18" />
+                  </svg>
+                </a>
               </div>
             </div>
-            {/* Download Android Build Button */}
-            <a
-              href="https://expo.dev/accounts/thereallakshyajain16/projects/route-ai-mobile-app/builds/0cacd485-34b0-427b-952f-1bd976240bbf"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="mt-6 mb-8 inline-block bg-[#7c3aed] hover:bg-[#5b21b6] text-white font-semibold px-8 py-3 rounded-full text-lg shadow-lg transition focus:outline-none focus:ring-2 focus:ring-[#7c3aed] focus:ring-opacity-50"
-            >
-              Download Android Build
-            </a>
+            {/* End horizontal flex */}
           </div>
         </section>
       </div>
