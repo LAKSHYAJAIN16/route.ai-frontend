@@ -12,7 +12,10 @@ export default function Home() {
     if (link) (link as HTMLLinkElement).href = "/favicon.ico";
   }, []);
   return (
-    <div className="bg-white flex flex-col min-h-screen">
+    <>
+      <title>Route.AI - The future of public transit</title>
+      <link rel="icon" href="/favicon.ico" />
+      <div className="bg-white flex flex-col min-h-screen">
       {/* Navigation Bar */}
       <Navbar />
 
@@ -133,5 +136,6 @@ export default function Home() {
         </div>
       </section>
     </div>
+    </>
   );
 }

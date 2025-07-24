@@ -23,6 +23,8 @@ export default function Signup() {
 
   return (
     <>
+      <title>Sign Up</title>
+      <link rel="icon" href="/favicon.ico" />
       <div className="min-h-screen bg-white flex flex-col font-sans">
       {/* Navigation Bar */}
       <Navbar />

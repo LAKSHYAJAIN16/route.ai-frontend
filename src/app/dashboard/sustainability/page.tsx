@@ -68,10 +68,8 @@ const busTypeData = [
 export default function Sustainability() {
   return (
     <>
-      <Head>
-        <title>Sustainability</title>
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
+      <title>Sustainability</title>
+      <link rel="icon" href="/favicon.ico" />
       <div className="bg-[#f7f8fa] flex font-sans min-h-screen">
         <Sidebar selected="sustainability" />
         <main className="flex-1 p-8">
@@ -95,7 +93,7 @@ export default function Sustainability() {
               <div className="w-full h-6 bg-gray-200 rounded-full overflow-hidden">
                 <div
                   className="h-full bg-gradient-to-r from-green-400 to-[#2ee6a6] transition-all duration-700"
-                  style={{ width: `${(2800/3500)*100}%` }}
+                  style={{ width: `${(2800 / 3500) * 100}%` }}
                 />
               </div>
               <div className="flex justify-between text-xs text-[#b0b0b0] mt-1">

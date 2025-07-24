@@ -142,10 +142,8 @@ export default function Optimize() {
 
   return (
     <>
-      <Head>
-        <title>Optimize</title>
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
+      <title>Optimize</title>
+      <link rel="icon" href="/favicon.ico" />
       <div className="flex min-h-screen bg-gray-50"> {/* Layout wrapper for sidebar + main */}
         <Sidebar selected="optimize" />
         <main className="flex-1 p-8">
