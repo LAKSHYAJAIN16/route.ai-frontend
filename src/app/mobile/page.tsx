@@ -27,6 +27,10 @@ export default function MobilePage() {
             </span>
           </h1>
           <div className="w-full max-w-md flex flex-col items-center">
+            {/* Instructions for Mobile Emulator */}
+            <p className="text-sm text-gray-500 mb-4 text-center max-w-md">
+              This is a live preview of the route.ai mobile web app, shown inside a phone frame. You can interact with it just like on a real device—scroll, tap, and explore the features. For the full native experience, use the download button below to install the Android app.
+            </p>
             <div
               className="bg-[#f7f6fa] rounded-3xl shadow-lg flex flex-col items-center"
               style={{ padding: 0, width: frameWidth + 24, height: frameHeight + 24, display: 'flex', justifyContent: 'center' }}
@@ -48,16 +52,16 @@ export default function MobilePage() {
                 />
               </div>
             </div>
+            {/* Download Android Build Button */}
+            <a
+              href="https://expo.dev/accounts/thereallakshyajain16/projects/route-ai-mobile-app/builds/0cacd485-34b0-427b-952f-1bd976240bbf"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="mt-6 mb-8 inline-block bg-[#7c3aed] hover:bg-[#5b21b6] text-white font-semibold px-8 py-3 rounded-full text-lg shadow-lg transition focus:outline-none focus:ring-2 focus:ring-[#7c3aed] focus:ring-opacity-50"
+            >
+              Download Android Build
+            </a>
           </div>
-          {/* Download Android Build Button */}
-          <a
-            href="https://expo.dev/accounts/thereallakshyajain16/projects/route-ai-mobile-app/builds/0cacd485-34b0-427b-952f-1bd976240bbf"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="mt-6 inline-block bg-[#7c3aed] hover:bg-[#5b21b6] text-white font-semibold px-8 py-3 rounded-full text-lg shadow-lg transition focus:outline-none focus:ring-2 focus:ring-[#7c3aed] focus:ring-opacity-50"
-          >
-            Download Android Build
-          </a>
         </section>
       </div>
       <style jsx global>{`

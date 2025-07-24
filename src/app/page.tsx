@@ -41,7 +41,7 @@ export default function Home() {
           </div>
           <p className="text-lg md:text-xl text-[#404040] mb-6 md:mb-7">You ride the bus. We make it better.</p>
           <div className="flex flex-row gap-4 justify-center mb-0">
-            <a href="/signup" className="bg-[#7c3aed] hover:bg-[#5b21b6] text-white font-semibold px-8 py-3 rounded-full text-lg shadow-lg transition focus:outline-none focus:ring-2 focus:ring-[#7c3aed] focus:ring-opacity-50">Contact Us</a>
+            <a href="/signin" className="bg-[#7c3aed] hover:bg-[#5b21b6] text-white font-semibold px-8 py-3 rounded-full text-lg shadow-lg transition focus:outline-none focus:ring-2 focus:ring-[#7c3aed] focus:ring-opacity-50">Sign In</a>
             <a href="/mobile" className="bg-[#5f4bb6] hover:bg-[#2d2363] text-white font-semibold px-8 py-3 rounded-full text-lg shadow-lg transition focus:outline-none focus:ring-2 focus:ring-[#5f4bb6] focus:ring-opacity-50">Download Now</a>
           </div>
 
