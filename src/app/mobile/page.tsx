@@ -12,9 +12,9 @@ export default function MobilePage() {
       <link rel="icon" href="/favicon.ico" />
       <div className="min-h-screen bg-white flex flex-col font-sans">
         <Navbar />
-        <section className="flex flex-col items-center justify-center flex-1 px-4 relative mt-4">
+        <section className="flex flex-col items-center justify-center flex-1 px-2 sm:px-4 relative mt-4 w-full">
           <div className="text-xs tracking-widest text-[#b0b0b0] mb-2">MOBILE PREVIEW</div>
-          <h1 className="text-4xl md:text-5xl font-extrabold text-[#2d2363] mb-3 leading-tight">
+          <h1 className="text-2xl sm:text-4xl md:text-5xl font-extrabold text-[#2d2363] mb-3 leading-tight">
             <span
               className="inline-block bg-gradient-to-r from-purple-500 via-pink-500 to-yellow-400 bg-clip-text text-transparent relative font-extrabold shimmer-gradient"
               style={{
@@ -28,12 +28,12 @@ export default function MobilePage() {
           </h1>
           <div className="w-full max-w-md flex flex-col items-center">
             {/* Instructions for Mobile Emulator */}
-            <p className="text-sm text-gray-500 mb-4 text-center max-w-md">
+            <p className="text-xs sm:text-sm text-gray-500 mb-4 text-center max-w-md">
               This is a live preview of the route.ai mobile web app, shown inside a phone frame. You can interact with it just like on a real device—scroll, tap, and explore the features. For the full native experience, use the download button below to install the Android app.
             </p>
-            <div className="flex flex-row items-center justify-center gap-24 w-full">
+            <div className="flex flex-col md:flex-row items-center justify-center gap-8 md:gap-24 w-full">
               <div
-                className="bg-[#f7f6fa] rounded-3xl shadow-lg flex flex-col items-center"
+                className="bg-[#f7f6fa] rounded-3xl shadow-lg flex flex-col items-center mb-6 md:mb-0"
                 style={{ padding: 0, width: frameWidth + 24, height: frameHeight + 24, display: 'flex', justifyContent: 'center' }}
               >
                 <div className="relative" style={{ width: frameWidth, height: frameHeight }}>
@@ -54,12 +54,12 @@ export default function MobilePage() {
                 </div>
               </div>
               {/* Download Android Build Button */}
-              <div className="flex flex-col items-center gap-8 w-full">
+              <div className="flex flex-col items-center gap-4 w-full max-w-xs">
                 <a
                   href="https://expo.dev/accounts/thereallakshyajain16/projects/route-ai-mobile-app/builds/0cacd485-34b0-427b-952f-1bd976240bbf"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="w-full max-w-[320px] text-center bg-[#7c3aed] hover:bg-[#5b21b6] text-white font-semibold px-8 py-3 rounded-full text-lg shadow-lg transition focus:outline-none focus:ring-2 focus:ring-[#7c3aed] focus:ring-opacity-50"
+                  className="w-full text-center bg-[#7c3aed] hover:bg-[#5b21b6] text-white font-semibold px-6 py-3 rounded-full text-base sm:text-lg shadow-lg transition focus:outline-none focus:ring-2 focus:ring-[#7c3aed] focus:ring-opacity-50"
                   style={{ whiteSpace: 'nowrap' }}
                 >
                   Download Android Build
@@ -68,7 +68,7 @@ export default function MobilePage() {
                   href="https://route-ai-mobile.vercel.app/"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="w-full max-w-[320px] inline-flex items-center justify-center gap-2 bg-white border border-[#7c3aed] hover:bg-[#f3e8ff] text-[#7c3aed] font-semibold px-8 py-3 rounded-full text-base shadow transition focus:outline-none focus:ring-2 focus:ring-[#7c3aed] focus:ring-opacity-50"
+                  className="w-full inline-flex items-center justify-center gap-2 bg-white border border-[#7c3aed] hover:bg-[#f3e8ff] text-[#7c3aed] font-semibold px-6 py-3 rounded-full text-base shadow transition focus:outline-none focus:ring-2 focus:ring-[#7c3aed] focus:ring-opacity-50"
                   style={{ whiteSpace: 'nowrap' }}
                 >
                   Open Mobile View in New Tab
