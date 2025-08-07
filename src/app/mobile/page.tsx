@@ -1,5 +1,6 @@
 "use client";
 import Navbar from '../../components/Navbar';
+import Footer from '../../components/Footer';
 import Image from 'next/image';
 
 export default function MobilePage() {
@@ -10,11 +11,11 @@ export default function MobilePage() {
     <>
       <title>Mobile Preview</title>
       <link rel="icon" href="/favicon.ico" />
-      <div className="min-h-screen bg-white flex flex-col font-sans">
+      <div className="min-h-screen flex flex-col font-sans">
         <Navbar />
         <section className="flex flex-col items-center justify-center flex-1 px-2 sm:px-4 relative mt-4 w-full">
-          <div className="text-xs tracking-widest text-[#b0b0b0] mb-2">MOBILE PREVIEW</div>
-          <h1 className="text-2xl sm:text-4xl md:text-5xl font-extrabold text-[#2d2363] mb-3 leading-tight">
+          <div className="text-xs tracking-widest text-[#b0b0b0] mt-2 ">MOBILE PREVIEW</div>
+          <h1 className="text-2xl sm:text-4xl md:text-7xl font-extrabold text-white mb-3 leading-tight">
             <span
               className="inline-block bg-gradient-to-r from-purple-500 via-pink-500 to-yellow-400 bg-clip-text text-transparent relative font-extrabold shimmer-gradient"
               style={{
@@ -28,19 +29,19 @@ export default function MobilePage() {
           </h1>
           <div className="w-full max-w-md flex flex-col items-center">
             {/* Instructions for Mobile Emulator */}
-            <p className="text-xs sm:text-sm text-gray-500 mb-4 text-center max-w-md">
+            <p className="text-xs sm:text-sm text-white mb-4 text-center max-w-md">
               This is a live preview of the route.ai mobile web app, shown inside a phone frame. You can interact with it just like on a real device—scroll, tap, and explore the features. For the full native experience, use the download button below to install the Android app.
             </p>
-            <div className="flex flex-col md:flex-row items-center justify-center gap-8 md:gap-24 w-full">
+            <div className="mt-5 flex flex-col md:flex-row items-center justify-center gap-8 md:gap-24 w-full">
               <div
-                className="bg-[#f7f6fa] rounded-3xl shadow-lg flex flex-col items-center mb-6 md:mb-0"
+                className=" rounded-3xl shadow-lg flex flex-col items-center mb-6 md:mb-0"
                 style={{ padding: 0, width: frameWidth + 24, height: frameHeight + 24, display: 'flex', justifyContent: 'center' }}
               >
                 <div className="relative" style={{ width: frameWidth, height: frameHeight }}>
                   <iframe
                     src="https://route-ai-mobile.vercel.app/"
                     title="Route AI Mobile"
-                    className="absolute top-0 left-0 rounded-3xl border-none z-10 bg-white hide-scrollbar"
+                    className="absolute top-0 left-0 rounded-3xl border-none z-10  hide-scrollbar"
                     style={{ width: frameWidth, height: frameHeight, boxShadow: '0 2px 16px rgba(0,0,0,0.10)', overflow: 'auto' }}
                   />
                   <Image
@@ -81,6 +82,7 @@ export default function MobilePage() {
             {/* End horizontal flex */}
           </div>
         </section>
+        <Footer />
       </div>
       <style jsx global>{`
         .hide-scrollbar::-webkit-scrollbar {

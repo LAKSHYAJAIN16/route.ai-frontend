@@ -30,6 +30,192 @@ html, body {
   overflow-x: hidden;
 }
 
+/* Navbar Animations */
+@keyframes gradient-x {
+  0%, 100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+.animate-gradient-x {
+  animation: gradient-x 3s ease infinite;
+}
+
+.bg-size-200 {
+  background-size: 200% 200%;
+}
+
+/* Particle System */
+.particle-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 1;
+  overflow: hidden;
+}
+
+.particle {
+  position: absolute;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  animation: float 20s infinite linear;
+}
+
+/* Particle Colors and Animations */
+.particle:nth-child(1) { background: #8b5cf6; animation-duration: 15s; animation-delay: 0s; }
+.particle:nth-child(2) { background: #ec4899; animation-duration: 18s; animation-delay: 2s; }
+.particle:nth-child(3) { background: #f59e0b; animation-duration: 22s; animation-delay: 4s; }
+.particle:nth-child(4) { background: #10b981; animation-duration: 16s; animation-delay: 6s; }
+.particle:nth-child(5) { background: #3b82f6; animation-duration: 19s; animation-delay: 8s; }
+.particle:nth-child(6) { background: #ef4444; animation-duration: 21s; animation-delay: 10s; }
+.particle:nth-child(7) { background: #a855f7; animation-duration: 17s; animation-delay: 12s; }
+.particle:nth-child(8) { background: #06b6d4; animation-duration: 20s; animation-delay: 14s; }
+.particle:nth-child(9) { background: #84cc16; animation-duration: 23s; animation-delay: 16s; }
+.particle:nth-child(10) { background: #f97316; animation-duration: 18s; animation-delay: 18s; }
+.particle:nth-child(11) { background: #8b5cf6; animation-duration: 16s; animation-delay: 20s; }
+.particle:nth-child(12) { background: #ec4899; animation-duration: 19s; animation-delay: 22s; }
+.particle:nth-child(13) { background: #f59e0b; animation-duration: 21s; animation-delay: 24s; }
+.particle:nth-child(14) { background: #10b981; animation-duration: 17s; animation-delay: 26s; }
+.particle:nth-child(15) { background: #3b82f6; animation-duration: 20s; animation-delay: 28s; }
+.particle:nth-child(16) { background: #ef4444; animation-duration: 18s; animation-delay: 30s; }
+.particle:nth-child(17) { background: #a855f7; animation-duration: 22s; animation-delay: 32s; }
+.particle:nth-child(18) { background: #06b6d4; animation-duration: 19s; animation-delay: 34s; }
+.particle:nth-child(19) { background: #84cc16; animation-duration: 21s; animation-delay: 36s; }
+.particle:nth-child(20) { background: #f97316; animation-duration: 17s; animation-delay: 38s; }
+
+/* Particle Positions */
+.particle:nth-child(1) { left: 10%; top: 20%; }
+.particle:nth-child(2) { left: 20%; top: 60%; }
+.particle:nth-child(3) { left: 30%; top: 40%; }
+.particle:nth-child(4) { left: 40%; top: 80%; }
+.particle:nth-child(5) { left: 50%; top: 30%; }
+.particle:nth-child(6) { left: 60%; top: 70%; }
+.particle:nth-child(7) { left: 70%; top: 50%; }
+.particle:nth-child(8) { left: 80%; top: 20%; }
+.particle:nth-child(9) { left: 90%; top: 60%; }
+.particle:nth-child(10) { left: 15%; top: 90%; }
+.particle:nth-child(11) { left: 25%; top: 10%; }
+.particle:nth-child(12) { left: 35%; top: 75%; }
+.particle:nth-child(13) { left: 45%; top: 25%; }
+.particle:nth-child(14) { left: 55%; top: 85%; }
+.particle:nth-child(15) { left: 65%; top: 15%; }
+.particle:nth-child(16) { left: 75%; top: 65%; }
+.particle:nth-child(17) { left: 85%; top: 35%; }
+.particle:nth-child(18) { left: 95%; top: 80%; }
+.particle:nth-child(19) { left: 5%; top: 45%; }
+.particle:nth-child(20) { left: 95%; top: 5%; }
+
+/* Particle Animation */
+@keyframes float {
+  0% {
+    transform: translateY(0px) translateX(0px) scale(1);
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+  }
+  50% {
+    transform: translateY(-100px) translateX(50px) scale(1.2);
+    opacity: 0.8;
+  }
+  90% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(-200px) translateX(100px) scale(0.8);
+    opacity: 0;
+  }
+}
+
+/* Glowing Effect for Particles */
+.particle::before {
+  content: '';
+  position: absolute;
+  top: -2px;
+  left: -2px;
+  right: -2px;
+  bottom: -2px;
+  border-radius: 50%;
+  background: inherit;
+  opacity: 0.3;
+  animation: glow 3s ease-in-out infinite alternate;
+}
+
+@keyframes glow {
+  0% {
+    transform: scale(1);
+    opacity: 0.3;
+  }
+  100% {
+    transform: scale(1.5);
+    opacity: 0.1;
+  }
+}
+
+/* Pulse Effect for Some Particles */
+.particle:nth-child(3n) {
+  animation: float 20s infinite linear, pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.3);
+  }
+}
+
+/* Sparkle Effect for Some Particles */
+.particle:nth-child(5n)::after {
+  content: '';
+  position: absolute;
+  top: -4px;
+  left: -4px;
+  right: -4px;
+  bottom: -4px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255,255,255,0.8) 0%, transparent 70%);
+  animation: sparkle 4s ease-in-out infinite;
+}
+
+@keyframes sparkle {
+  0%, 100% {
+    opacity: 0;
+    transform: scale(0.5);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Trail Effect for Some Particles */
+.particle:nth-child(7n) {
+  box-shadow: 0 0 10px currentColor;
+}
+
+/* Bounce Effect for Some Particles */
+.particle:nth-child(11n) {
+  animation: float 20s infinite linear, bounce 1.5s ease-in-out infinite;
+}
+
+@keyframes bounce {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
 @keyframes gradientMove {
   0% {
     background-position: 0% 50%;

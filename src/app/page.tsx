@@ -2,8 +2,8 @@
 
 import Image from "next/image";
 import Navbar from '../components/Navbar';
-import { useEffect } from "react";
-import { motion } from "framer-motion";
+import Footer from '../components/Footer';
+import { useEffect } from "react";  
 
 export default function Home() {
   useEffect(() => {
@@ -15,7 +15,15 @@ export default function Home() {
     <>
       <title>Route.AI - The future of public transit</title>
       <link rel="icon" href="/favicon.ico" />
-      <div className="bg-white flex flex-col min-h-screen">
+      
+      {/* Particle Background */}
+      <div className="particle-container">
+        {Array.from({ length: 20 }, (_, i) => (
+          <div key={i} className="particle" />
+        ))}
+      </div>
+      
+      <div className="flex flex-col min-h-screen">
       {/* Navigation Bar */}
       <Navbar />
 
@@ -23,10 +31,10 @@ export default function Home() {
       <section className="flex-1 flex flex-col items-center justify-center text-center px-4 relative pt-8 pb-0 md:pb-8 w-full">
         <div className="relative z-10 flex flex-col items-center">
           <div className="relative z-50">
-            <h1
-              className="text-3xl sm:text-4xl md:text-5xl text-[#1E0E62] mb-2 md:mb-3 font-semibold"
-              style={{ lineHeight: '52px', letterSpacing: '-0.4px' }}
-            >
+                      <h1
+            className="text-3xl sm:text-4xl md:text-7xl text-white mb-2 md:mb-3 mt-4 font-semibold"
+            style={{ lineHeight: '52px', letterSpacing: '-0.4px' }}
+          >
               The <span
                 className="inline-block bg-gradient-to-r from-purple-500 via-pink-500 to-yellow-400 bg-clip-text text-transparent relative font-extrabold shimmer-gradient"
                 style={{
@@ -39,7 +47,7 @@ export default function Home() {
               </span> of public transit is here.
             </h1>
           </div>
-          <p className="text-base sm:text-lg md:text-xl text-[#404040] mb-6 md:mb-7">You ride the bus. We make it better.</p>
+          <p className="text-base sm:text-lg md:text-2xl text-gray-300 mb-6 md:mb-7 md:mt-4">You ride the bus. We make it better.</p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center mb-0 w-full max-w-xs sm:max-w-none">
             <a href="/signin" className="bg-[#7c3aed] hover:bg-[#5b21b6] text-white font-semibold px-8 py-3 rounded-full text-lg shadow-lg transition focus:outline-none focus:ring-2 focus:ring-[#7c3aed] focus:ring-opacity-50">Sign In</a>
             <a href="/mobile" className="bg-[#5f4bb6] hover:bg-[#2d2363] text-white font-semibold px-8 py-3 rounded-full text-lg shadow-lg transition focus:outline-none focus:ring-2 focus:ring-[#5f4bb6] focus:ring-opacity-50">Download Now</a>
@@ -199,69 +207,66 @@ export default function Home() {
           </div>
         </div>
       </section>
-      {/* Resources Section */}
-      <section className="w-full flex justify-center items-center py-8 sm:py-12 px-2">
-        <div className="w-full max-w-4xl min-h-[200px] sm:min-h-[250px] bg-[#2d1e7b] rounded-lg flex flex-col justify-center items-center p-4 sm:p-8">
-          <h2 className="text-white text-base sm:text-lg tracking-widest mb-4">RESOURCES</h2>
-          <div className="w-full flex flex-col sm:flex-row justify-center items-center gap-4">
-            {/* Storyboard Button - Shows Image */}
-            <button
-              className="bg-white text-[#2d1e7b] font-semibold px-8 py-4 rounded-lg shadow hover:bg-gray-100 transition cursor-pointer text-lg sm:text-xl"
-              onClick={() => {
-                const img = document.createElement('img');
-                img.src = '/story.png';
-                img.alt = 'Storyboard';
-                img.style.maxWidth = '90vw';
-                img.style.maxHeight = '90vh';
-                img.style.display = 'block';
-                img.style.margin = '40px auto';
-                img.style.borderRadius = '12px';
-                img.style.boxShadow = '0 4px 32px rgba(0,0,0,0.18)';
-                const overlay = document.createElement('div');
-                overlay.style.position = 'fixed';
-                overlay.style.top = '0';
-                overlay.style.left = '0';
-                overlay.style.width = '100vw';
-                overlay.style.height = '100vh';
-                overlay.style.background = 'rgba(0,0,0,0.7)';
-                overlay.style.zIndex = '9999';
-                overlay.appendChild(img);
-                overlay.onclick = () => document.body.removeChild(overlay);
-                document.body.appendChild(overlay);
-              }}
-            >
-              Storyboard
-            </button>
-            {/* Pitch Deck Button - Link */}
-            <a
-              href="https://www.canva.com/design/DAGuAPdN88k/wBPVyEjKf-LqvtAN9ho-Bg/edit?utm_content=DAGuAPdN88k&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="bg-white text-[#2d1e7b] font-semibold px-8 py-4 rounded-lg shadow hover:bg-gray-100 transition text-center text-lg sm:text-xl"
-            >
-              Pitch Deck
-            </a>
-            {/* Precis Button - Link */}
-            <a
-              href="https://docs.google.com/document/d/1ZmB1ot8g6TyNC4pt5DfNzP0JGCjROguElIoEvkVs1FE/edit?tab=t.0#heading=h.r5bob7brynj2"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="bg-white text-[#2d1e7b] font-semibold px-8 py-4 rounded-lg shadow hover:bg-gray-100 transition text-center text-lg sm:text-xl"
-            >
-              Precis
-            </a>
-            {/* Miro Button - Link */}
-            <a
-              href="https://miro.com/app/board/uXjVJdm2-Kc=/"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="bg-white text-[#2d1e7b] font-semibold px-8 py-4 rounded-lg shadow hover:bg-gray-100 transition text-center text-lg sm:text-xl"
-            >
-              Miro
-            </a>
+
+      {/* Problem Section */}
+      <section className="w-full flex justify-center items-center py-16 px-4">
+        <div className="w-full max-w-6xl">
+          <div className="text-center mb-12">
+            <h2 className="text-white text-2xl sm:text-3xl font-bold mb-4">The Problem</h2>
+            <p className="text-gray-300 text-lg max-w-2xl mx-auto">
+              Public transit riders face daily frustrations that make planning their journeys difficult and stressful.
+            </p>
+          </div>
+          
+          <div className="grid md:grid-cols-2 gap-8 lg:gap-12">
+            <div className="bg-gradient-to-br from-purple-900/50 to-blue-900/50 backdrop-blur-sm rounded-2xl p-8 border border-purple-500/20">
+              <h3 className="text-white text-xl font-semibold mb-6 text-center">Rider Experience</h3>
+              <div className="space-y-4">
+                <div className="flex items-center space-x-3">
+                  <div className="w-2 h-2 bg-red-400 rounded-full"></div>
+                  <span className="text-gray-200">Unreliable schedules and frequent delays</span>
+                </div>
+                <div className="flex items-center space-x-3">
+                  <div className="w-2 h-2 bg-red-400 rounded-full"></div>
+                  <span className="text-gray-200">Poor communication from transit agencies</span>
+                </div>
+                <div className="flex items-center space-x-3">
+                  <div className="w-2 h-2 bg-red-400 rounded-full"></div>
+                  <span className="text-gray-200">Lack of real-time updates and notifications</span>
+                </div>
+                <div className="flex items-center space-x-3">
+                  <div className="w-2 h-2 bg-red-400 rounded-full"></div>
+                  <span className="text-gray-200">No feedback mechanism for riders</span>
+                </div>
+              </div>
+            </div>
+            
+            <div className="bg-gradient-to-br from-purple-900/50 to-blue-900/50 backdrop-blur-sm rounded-2xl p-8 border border-purple-500/20">
+              <h3 className="text-white text-xl font-semibold mb-6 text-center">System Inefficiencies</h3>
+              <div className="space-y-4">
+                <div className="flex items-center space-x-3">
+                  <div className="w-2 h-2 bg-orange-400 rounded-full"></div>
+                  <span className="text-gray-200">Inefficient routes and poor optimization</span>
+                </div>
+                <div className="flex items-center space-x-3">
+                  <div className="w-2 h-2 bg-orange-400 rounded-full"></div>
+                  <span className="text-gray-200">Limited data on rider patterns and preferences</span>
+                </div>
+                <div className="flex items-center space-x-3">
+                  <div className="w-2 h-2 bg-orange-400 rounded-full"></div>
+                  <span className="text-gray-200">No real-time demand forecasting</span>
+                </div>
+                <div className="flex items-center space-x-3">
+                  <div className="w-2 h-2 bg-orange-400 rounded-full"></div>
+                  <span className="text-gray-200">Inadequate resource allocation</span>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </section>
+
+      <Footer />
     </div>
     </>
   );
